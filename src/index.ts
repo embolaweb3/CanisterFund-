@@ -3,7 +3,8 @@ import {
   update,
   Principal,
   IDL,
-  msgCaller
+  msgCaller,
+  time
 } from "azle";
 import { v4 as uuidv4 } from "uuid";
 
@@ -75,4 +76,51 @@ let campaigns: Campaign[] = [];
 let contributions: CampaignContribution[] = [];
 let userProfiles: UserProfile[] = [];
 
+export default class CanisterFund{
+  // ========== USER MANAGEMENT ==========
+  @update([IDL.Text, IDL.Nat64], IDL.Text)
+  registerUser(name: string, initialBalance: bigint): string {
+    const userPrincipal = msgCaller();
+    
+    if (userProfiles.some(u => u.principal.toText() === userPrincipal.toText())) {
+      return "User already registered";
+    }
+
+    const newUser: UserProfile = {
+      principal: userPrincipal,
+      name,
+      balance: initialBalance
+    };
+    userProfiles.push(newUser);
+    return `User ${name} registered successfully`;
+  }
+
+  // ========== CAMPAIGN MANAGEMENT ==========
+  @update([IDL.Text, IDL.Text, IDL.Nat64, IDL.Nat64],IDL.Nat64)
+  createCampaign(
+    title: string,
+    description: string,
+    targetAmount: bigint,
+    endDate: bigint
+  ): string{
+    if (!userProfiles.some(u => u.principal.toText() === msgCaller().toText())) {
+      return "User not registered";
+    }
+
+    const newCampaign: Campaign = {
+      id: uuidv4(),
+      title,
+      description,
+      targetAmount,
+      currentAmount: 0n,
+      beneficiary: msgCaller(),
+      status: { Active: "ACTIVE" },
+      creationDate: time(),
+      endDate
+    };
+    campaigns.push(newCampaign);
+    return newCampaign.id;
+  }
+
+  }
 
