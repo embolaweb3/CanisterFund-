@@ -178,6 +178,24 @@ export default class CanisterFund{
     return `Successfully contributed ${amount} to campaign ${campaignId}`;
   }
 
+  @update([IDL.Text],IDL.Text)
+  closeCampaign(campaignId: string): string {
+    const campaign = campaigns.find(c => c.id.toString() === campaignId.toString());
+    if (!campaign) return "Campaign not found";
+
+    if (campaign.status !== "ACTIVE") {
+      return "Only active campaigns can be closed";
+    }
+
+    // Determine final status
+    campaign.status = campaign.currentAmount >= campaign.targetAmount 
+      ? "COMPLETED" 
+      : "CANCELLED";
+
+
+    return `Campaign marked as ${campaign.status}`;
+  }
+
   // ========== QUERY METHODS ==========
   @query([], IDL.Vec(CampaignIDL))
   getCampaigns(): Campaign[] {
