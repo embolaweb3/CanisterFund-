@@ -21,7 +21,7 @@ interface Campaign {
   targetAmount: bigint;
   currentAmount: bigint;
   beneficiary: Principal;
-  status: CampaignStatus;
+  status: string;
   creationDate: bigint;
   endDate: bigint;
 }
@@ -53,7 +53,7 @@ const CampaignIDL = IDL.Record({
   targetAmount: IDL.Nat64,
   currentAmount: IDL.Nat64,
   beneficiary: IDL.Principal,
-  status: CampaignStatusIDL,
+  status: IDL.Text,
   creationDate: IDL.Nat64,
   endDate: IDL.Nat64,
 });
@@ -114,7 +114,7 @@ export default class CanisterFund{
       targetAmount,
       currentAmount: 0n,
       beneficiary: msgCaller(),
-      status: { Active: "ACTIVE" },
+      status: "Active",
       creationDate: time(),
       endDate
     };
@@ -122,5 +122,38 @@ export default class CanisterFund{
     return newCampaign.id;
   }
 
+  @update([IDL.Text, IDL.Nat64], IDL.Nat64)
+  contributeToCampaign(campaignId: string, amount: bigint): string {
+    const user = userProfiles.find(u => u.principal.toText() === msgCaller().toText());
+    if (!user) return "User not found";
+
+    const campaign = campaigns.find(c => c.id.toString() === campaignId.toString());
+    if (!campaign) return "Campaign not found";
+
+    if (campaign.status !== "Active") {
+      return "Campaign is not active";
+    }
+
+    if (user.balance < amount) {
+      return "Insufficient balance";
+    }
+
+    // Update campaign
+    campaign.currentAmount += amount;
+
+    // Record contribution
+    contributions.push({
+      campaignId,
+      contributor: msgCaller(),
+      amount,
+      timestamp: time()
+    });
+
+    // Update user balance
+    user.balance -= amount;
+
+    return `Successfully contributed ${amount} to campaign ${campaignId}`;
   }
+
+ }
 
