@@ -122,6 +122,29 @@ export default class CanisterFund{
     return newCampaign.id;
   }
 
+  @update([IDL.Text,IDL.Text,IDL.Text, IDL.Nat64, IDL.Nat64], IDL.Text)
+  updateCampaign(
+    campaignId: string,
+    title: string,
+    description: string,
+    targetAmount: bigint,
+    endDate: bigint
+  ): string{
+    const campaign = campaigns.find(c => c.id.toString() === campaignId.toString());
+    if (!campaign) return "Campaign not found";
+    
+    if (campaign.status !== "ACTIVE") {
+      return "Only active campaigns can be updated";
+    }
+
+    campaign.title = title;
+    campaign.description = description;
+    campaign.targetAmount = targetAmount;
+    campaign.endDate = endDate;
+
+    return "Campaign updated successfully";
+  }
+
   @update([IDL.Text, IDL.Nat64], IDL.Nat64)
   contributeToCampaign(campaignId: string, amount: bigint): string {
     const user = userProfiles.find(u => u.principal.toText() === msgCaller().toText());
@@ -182,6 +205,8 @@ export default class CanisterFund{
       averageContribution: average
     };
   }
+
+  // TODOS : searchcampaign,updatecampaign,closecampaign
 
   // ========== UTILITY METHODS ==========
   @query([], IDL.Nat64)
