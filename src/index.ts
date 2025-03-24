@@ -196,6 +196,18 @@ export default class CanisterFund{
     return `Campaign marked as ${campaign.status}`;
   }
 
+  @query([IDL.Text], IDL.Vec(CampaignIDL))
+  searchCampaigns(keyword: string): [] | object {
+    const lowerKeyword = keyword.toLowerCase();
+    return campaigns
+      .filter(c => 
+        c.title.toLowerCase().includes(lowerKeyword) ||
+        c.description.toLowerCase().includes(lowerKeyword) ||
+        c.beneficiary.toText().toLowerCase().includes(lowerKeyword)
+      )
+     ;
+  }
+
   // ========== QUERY METHODS ==========
   @query([], IDL.Vec(CampaignIDL))
   getCampaigns(): Campaign[] {
