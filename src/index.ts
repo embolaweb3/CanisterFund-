@@ -155,5 +155,38 @@ export default class CanisterFund{
     return `Successfully contributed ${amount} to campaign ${campaignId}`;
   }
 
- }
+  // ========== QUERY METHODS ==========
+  @query([], IDL.Vec(CampaignIDL))
+  getCampaigns(): Campaign[] {
+    return campaigns;
+  }
+
+  @query([IDL.Text], IDL.Vec(CampaignContributionIDL))
+  getCampaignContributions(campaignId: string): CampaignContribution[] {
+    return contributions.filter(c => c.campaignId === campaignId);
+  }
+
+  getCampaignStatistics(campaignId: string): {
+    totalAmountRaised: bigint;
+    numberOfContributors: bigint;
+    averageContribution: bigint;
+  } {
+    const campaignContributions = contributions.filter(c => c.campaignId === campaignId);
+    const total = campaignContributions.reduce((sum, c) => sum + c.amount, 0n);
+    const count = BigInt(campaignContributions.length);
+    const average = count > 0n ? total / count : 0n;
+
+    return {
+      totalAmountRaised: total,
+      numberOfContributors: count,
+      averageContribution: average
+    };
+  }
+
+  // ========== UTILITY METHODS ==========
+  @query([], IDL.Nat64)
+  getTotalCampaigns(): bigint {
+    return BigInt(campaigns.length);
+  }
+}
 
