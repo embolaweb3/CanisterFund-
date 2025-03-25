@@ -5670,7 +5670,7 @@ var CanisterFund = class {
   updateCampaign(campaignId, title, description, targetAmount, endDate) {
     const campaign = campaigns.find((c) => c.id.toString() === campaignId.toString());
     if (!campaign) return "Campaign not found";
-    if (campaign.status !== "ACTIVE") {
+    if (campaign.status !== "Active") {
       return "Only active campaigns can be updated";
     }
     campaign.title = title;
@@ -5703,7 +5703,7 @@ var CanisterFund = class {
   closeCampaign(campaignId) {
     const campaign = campaigns.find((c) => c.id.toString() === campaignId.toString());
     if (!campaign) return "Campaign not found";
-    if (campaign.status !== "ACTIVE") {
+    if (campaign.status !== "Active") {
       return "Only active campaigns can be closed";
     }
     campaign.status = campaign.currentAmount >= campaign.targetAmount ? "COMPLETED" : "CANCELLED";

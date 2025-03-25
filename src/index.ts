@@ -173,8 +173,8 @@ export default class CanisterFund{
 
     // Determine final status
     campaign.status = campaign.currentAmount >= campaign.targetAmount 
-      ? "COMPLETED" 
-      : "CANCELLED";
+      ? "Completed" 
+      : "Cancelled";
 
 
     return `Campaign marked as ${campaign.status}`;
