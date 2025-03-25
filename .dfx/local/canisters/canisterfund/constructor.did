@@ -1,6 +1,6 @@
 service : () -> {
   closeCampaign : (text) -> (text);
-  contributeToCampaign : (text, nat64) -> (nat64);
+  contributeToCampaign : (text, nat64) -> (text);
   createCampaign : (text, text, nat64, nat64, nat64) -> (text);
   getCampaignContributions : (text) -> (
       vec record {

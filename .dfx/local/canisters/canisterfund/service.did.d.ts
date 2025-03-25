@@ -4,7 +4,7 @@ import type { IDL } from '@dfinity/candid';
 
 export interface _SERVICE {
   'closeCampaign' : ActorMethod<[string], string>,
-  'contributeToCampaign' : ActorMethod<[string, bigint], bigint>,
+  'contributeToCampaign' : ActorMethod<[string, bigint], string>,
   'createCampaign' : ActorMethod<
     [string, string, bigint, bigint, bigint],
     string

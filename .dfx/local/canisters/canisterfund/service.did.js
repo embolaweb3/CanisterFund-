@@ -1,7 +1,7 @@
 export const idlFactory = ({ IDL }) => {
   return IDL.Service({
     'closeCampaign' : IDL.Func([IDL.Text], [IDL.Text], []),
-    'contributeToCampaign' : IDL.Func([IDL.Text, IDL.Nat64], [IDL.Nat64], []),
+    'contributeToCampaign' : IDL.Func([IDL.Text, IDL.Nat64], [IDL.Text], []),
     'createCampaign' : IDL.Func(
         [IDL.Text, IDL.Text, IDL.Nat64, IDL.Nat64, IDL.Nat64],
         [IDL.Text],

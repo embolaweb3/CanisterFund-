@@ -117,7 +117,7 @@ export default class CanisterFund{
     const campaign = campaigns.find(c => c.id.toString() === campaignId.toString());
     if (!campaign) return "Campaign not found";
     
-    if (campaign.status !== "ACTIVE") {
+    if (campaign.status !== "Active") {
       return "Only active campaigns can be updated";
     }
 
@@ -129,7 +129,7 @@ export default class CanisterFund{
     return "Campaign updated successfully";
   }
 
-  @update([IDL.Text, IDL.Nat64], IDL.Nat64)
+  @update([IDL.Text, IDL.Nat64], IDL.Text)
   contributeToCampaign(campaignId: string, amount: bigint): string {
     const user = userProfiles.find(u => u.principal.toText() === msgCaller().toText());
     if (!user) return "User not found";
@@ -167,7 +167,7 @@ export default class CanisterFund{
     const campaign = campaigns.find(c => c.id.toString() === campaignId.toString());
     if (!campaign) return "Campaign not found";
 
-    if (campaign.status !== "ACTIVE") {
+    if (campaign.status !== "Active") {
       return "Only active campaigns can be closed";
     }
 
@@ -220,7 +220,6 @@ export default class CanisterFund{
     };
   }
 
-  // TODOS : searchcampaign,updatecampaign,closecampaign
 
   // ========== UTILITY METHODS ==========
   @query([], IDL.Nat64)
