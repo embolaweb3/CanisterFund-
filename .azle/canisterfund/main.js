@@ -5706,7 +5706,7 @@ var CanisterFund = class {
     if (campaign.status !== "Active") {
       return "Only active campaigns can be closed";
     }
-    campaign.status = campaign.currentAmount >= campaign.targetAmount ? "COMPLETED" : "CANCELLED";
+    campaign.status = campaign.currentAmount >= campaign.targetAmount ? "Completed" : "Cancelled";
     return `Campaign marked as ${campaign.status}`;
   }
   searchCampaigns(keyword) {
