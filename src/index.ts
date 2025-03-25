@@ -6,13 +6,8 @@ import {
   msgCaller,
   time
 } from "azle";
-import { v4 as uuidv4 } from "uuid";
+import { v7 } from "uuid";
 
-// ========== MANUALLY DEFINED TYPES ==========
-type CampaignStatus = 
-  | { Active: string }
-  | { Completed: string }
-  | { Cancelled: string };
 
 interface Campaign {
   id: string;
@@ -39,13 +34,6 @@ interface UserProfile {
   balance: bigint;
 }
 
-// ========== IDL DEFINITIONS ==========
-const CampaignStatusIDL = IDL.Variant({
-  Active: IDL.Text,
-  Completed: IDL.Text,
-  Cancelled: IDL.Text,
-});
-
 const CampaignIDL = IDL.Record({
   id: IDL.Text,
   title: IDL.Text,
@@ -65,11 +53,6 @@ const CampaignContributionIDL = IDL.Record({
   timestamp: IDL.Nat64,
 });
 
-const UserProfileIDL = IDL.Record({
-  principal: IDL.Principal,
-  name: IDL.Text,
-  balance: IDL.Nat64,
-});
 
 // ========== STORAGE ==========
 let campaigns: Campaign[] = [];
@@ -96,11 +79,12 @@ export default class CanisterFund{
   }
 
   // ========== CAMPAIGN MANAGEMENT ==========
-  @update([IDL.Text, IDL.Text, IDL.Nat64, IDL.Nat64],IDL.Nat64)
+  @update([IDL.Text, IDL.Text, IDL.Nat64,IDL.Nat64, IDL.Nat64],IDL.Text)
   createCampaign(
     title: string,
     description: string,
     targetAmount: bigint,
+    currentAmount :bigint,
     endDate: bigint
   ): string{
     if (!userProfiles.some(u => u.principal.toText() === msgCaller().toText())) {
@@ -108,18 +92,18 @@ export default class CanisterFund{
     }
 
     const newCampaign: Campaign = {
-      id: uuidv4(),
+      id: v7(),
       title,
       description,
       targetAmount,
-      currentAmount: 0n,
+      currentAmount,
       beneficiary: msgCaller(),
       status: "Active",
       creationDate: time(),
       endDate
     };
     campaigns.push(newCampaign);
-    return newCampaign.id;
+    return `Campaign created successfully`;
   }
 
   @update([IDL.Text,IDL.Text,IDL.Text, IDL.Nat64, IDL.Nat64], IDL.Text)
