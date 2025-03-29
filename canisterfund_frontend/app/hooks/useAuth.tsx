@@ -4,6 +4,8 @@ import { useState, useEffect, useCallback } from 'react';
 import { AuthClient } from '@dfinity/auth-client';
 import { createActor } from '../utils/crowdfunding';
 import { Principal } from '@dfinity/principal';
+import { toast } from 'react-hot-toast';
+
 
 export const useAuth = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -74,6 +76,7 @@ export const useAuth = () => {
       try {
         const response = await actor.registerUser(name, BigInt(10));
         if(response.includes('successfully') || response.includes('already')){
+          toast.success(response);
           return true
         }
         else{
@@ -82,6 +85,7 @@ export const useAuth = () => {
        
         
       } catch (error) {
+        toast.error("Registration failed");
         console.error("Registration failed:", error);
         return false;
       }

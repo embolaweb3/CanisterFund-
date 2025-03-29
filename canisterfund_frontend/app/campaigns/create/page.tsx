@@ -36,8 +36,8 @@ export default function CreateCampaignPage() {
         formData.title,
         formData.description,
         targetAmount,
-        endDate,
-        BigInt(0) // currentAmount starts at 0
+        BigInt(0), // currentAmount starts at 0
+        endDate
       );
 
       console.log(result,'rsults')

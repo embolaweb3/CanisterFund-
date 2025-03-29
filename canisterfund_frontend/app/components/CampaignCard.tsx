@@ -38,8 +38,8 @@ export default function CampaignCard({ campaign }: CampaignCardProps) {
           <ProgressBar progress={progress} />
           
           <div className="flex justify-between mt-2 text-sm text-gray-600">
-            <span>Raised: {Number(campaign.currentAmount).toLocaleString()} ICP</span>
-            <span>Goal: {Number(campaign.targetAmount).toLocaleString()} ICP</span>
+            <span>Raised: {Number(campaign.currentAmount) } ICP</span>
+            <span>Goal: {Number(campaign.targetAmount) / 100000000} ICP</span>
           </div>
           
           <div className="mt-3 text-sm text-gray-500">
@@ -48,10 +48,10 @@ export default function CampaignCard({ campaign }: CampaignCardProps) {
         </div>
         
         <div className="mt-6">
-          <Link href={`/campaigns/${campaign.id}`}>
-            <a className="w-full inline-flex justify-center items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-ic-blue hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-              View Details
-            </a>
+          <Link 
+          className='w-full inline-flex justify-center items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-ic-blue hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500'
+          href={`/campaigns/${campaign.id}`}>
+            View Details
           </Link>
         </div>
       </div>

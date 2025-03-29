@@ -16,7 +16,7 @@ export default function ContributionsList({ contributions }: { contributions: Co
                   {contribution.contributor.toString()}
                 </span>
                 <span>
-                  {Number(contribution.amount) / 1e8} ICP
+                  {Number(contribution.amount)} ICP
                 </span>
               </div>
               <div className="text-sm text-gray-500">
