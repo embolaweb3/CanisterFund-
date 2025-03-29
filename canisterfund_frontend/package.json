@@ -1,0 +1,34 @@
+{
+  "name": "canisterfund_frontend",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --turbopack",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@dfinity/agent": "^2.4.0",
+    "@dfinity/auth-client": "^2.4.0",
+    "@dfinity/principal": "^2.4.0",
+    "@heroicons/react": "^2.2.0",
+    "@tanstack/react-query": "^5.70.0",
+    "date-fn": "^0.0.2",
+    "date-fns": "^4.1.0",
+    "framer-motion": "^12.6.2",
+    "next": "15.2.4",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-hot-toast": "^2.5.2"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@types/date-fns": "^2.5.3",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  }
+}
