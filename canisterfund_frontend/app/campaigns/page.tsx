@@ -1,13 +1,56 @@
+"use client"
+
 import { useQuery } from '@tanstack/react-query';
 import Layout from '../components/Layout';
 import CampaignCard from '../components/CampaignCard';
-import { useAuth } from '../hooks/useAuth';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
+import {createActor} from '../utils/crowdfunding'
+import { useAuth } from '../hooks/useAuth';
 
 export default function CampaignsPage() {
-  const { actor } = useAuth();
   const [searchTerm, setSearchTerm] = useState('');
+    const [actor, setActor] = useState<any | null>(null);
+      const { isAuthenticated, principal } = useAuth();
+    
+  
+    const fetchActor = async () => {
+      try {
+        if (isAuthenticated) {
+          const actorInstance = await createActor();
+          setActor(actorInstance);
+          console.log('check')
+
+          if(!actor) return
+          console.log('check')
+          const chec = await actor.getCampaigns();
+          console.log(chec,'dd')
+        }
+      } catch (error) {
+        console.error("Failed to create actor:", error);
+      }
+    };
+    
+    useEffect(() => {
+      fetchActor();
+    }, [isAuthenticated]); 
+
+    const fetch = async () => {
+      try {
+        if (!isAuthenticated) {
+          fetchActor()
+        }
+        console.log('first')
+          const chec = await actor.getCampaigns();
+          console.log(chec,'dd')
+        
+      } catch (error) {
+        console.error("Failed to create actor:", error);
+      }
+    };
+    // setTimeout(()=>{
+    //   fetch()
+    // },3000)
   
   const { 
     data: campaigns, 
@@ -23,6 +66,7 @@ export default function CampaignsPage() {
         return searchTerm 
           ? await actor.searchCampaigns(searchTerm)
           : await actor.getCampaigns();
+          console.log('d',campaigns)
       } catch (err) {
         throw new Error(`Failed to fetch campaigns: ${err instanceof Error ? err.message : String(err)}`);
       }

@@ -5630,8 +5630,8 @@ var CampaignContributionIDL = idl_exports.Record({
 var campaigns = [];
 var contributions = [];
 var userProfiles = [];
-var _getTotalCampaigns_dec, _getCampaignContributions_dec, _getCampaigns_dec, _searchCampaigns_dec, _closeCampaign_dec, _contributeToCampaign_dec, _updateCampaign_dec, _createCampaign_dec, _registerUser_dec, _init;
-_registerUser_dec = [update([idl_exports.Text, idl_exports.Nat64], idl_exports.Text)], _createCampaign_dec = [update([idl_exports.Text, idl_exports.Text, idl_exports.Nat64, idl_exports.Nat64, idl_exports.Nat64], idl_exports.Text)], _updateCampaign_dec = [update([idl_exports.Text, idl_exports.Text, idl_exports.Text, idl_exports.Nat64, idl_exports.Nat64], idl_exports.Text)], _contributeToCampaign_dec = [update([idl_exports.Text, idl_exports.Nat64], idl_exports.Text)], _closeCampaign_dec = [update([idl_exports.Text], idl_exports.Text)], _searchCampaigns_dec = [query([idl_exports.Text], idl_exports.Vec(CampaignIDL))], _getCampaigns_dec = [query([], idl_exports.Vec(CampaignIDL))], _getCampaignContributions_dec = [query([idl_exports.Text], idl_exports.Vec(CampaignContributionIDL))], _getTotalCampaigns_dec = [query([], idl_exports.Nat64)];
+var _getTotalCampaigns_dec, _getCampaignContributions_dec, _getCampaigns_dec, _searchCampaigns_dec, _closeCampaign_dec, _contributeToCampaign_dec, _updateCampaign_dec, _createCampaign_dec, _getUser_dec, _registerUser_dec, _init;
+_registerUser_dec = [update([idl_exports.Text, idl_exports.Nat64], idl_exports.Text)], _getUser_dec = [query([], idl_exports.Bool)], _createCampaign_dec = [update([idl_exports.Text, idl_exports.Text, idl_exports.Nat64, idl_exports.Nat64, idl_exports.Nat64], idl_exports.Text)], _updateCampaign_dec = [update([idl_exports.Text, idl_exports.Text, idl_exports.Text, idl_exports.Nat64, idl_exports.Nat64], idl_exports.Text)], _contributeToCampaign_dec = [update([idl_exports.Text, idl_exports.Nat64], idl_exports.Text)], _closeCampaign_dec = [update([idl_exports.Text], idl_exports.Text)], _searchCampaigns_dec = [query([idl_exports.Text], idl_exports.Vec(CampaignIDL))], _getCampaigns_dec = [query([], idl_exports.Vec(CampaignIDL))], _getCampaignContributions_dec = [query([idl_exports.Text], idl_exports.Vec(CampaignContributionIDL))], _getTotalCampaigns_dec = [query([], idl_exports.Nat64)];
 var CanisterFund = class {
   constructor() {
     __runInitializers(_init, 5, this);
@@ -5648,6 +5648,11 @@ var CanisterFund = class {
     };
     userProfiles.push(newUser);
     return `User ${name} registered successfully`;
+  }
+  getUser() {
+    const user = msgCaller();
+    const isRegistered = userProfiles.find((c) => c.principal.toText() === user.toText());
+    return isRegistered ? true : false;
   }
   createCampaign(title, description, targetAmount, currentAmount, endDate) {
     if (!userProfiles.some((u) => u.principal.toText() === msgCaller().toText())) {
@@ -5738,6 +5743,7 @@ var CanisterFund = class {
 };
 _init = __decoratorStart(null);
 __decorateElement(_init, 1, "registerUser", _registerUser_dec, CanisterFund);
+__decorateElement(_init, 1, "getUser", _getUser_dec, CanisterFund);
 __decorateElement(_init, 1, "createCampaign", _createCampaign_dec, CanisterFund);
 __decorateElement(_init, 1, "updateCampaign", _updateCampaign_dec, CanisterFund);
 __decorateElement(_init, 1, "contributeToCampaign", _contributeToCampaign_dec, CanisterFund);

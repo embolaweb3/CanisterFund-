@@ -10,6 +10,19 @@ export const useAuth = () => {
   const [authClient, setAuthClient] = useState<AuthClient>();
   const [principal, setPrincipal] = useState<Principal>();
   const [actor, setActor] = useState<any>();
+  const [isRegistered, setIsRegistered] = useState(false);
+
+  const checkRegistration = async (actor: any, principal: Principal) => {
+    try {
+      // Assuming you have a canister method to check registration
+      const response = await actor.checkUserRegistration(principal.toString());
+      setIsRegistered(response);
+      return response;
+    } catch (error) {
+      console.error("Registration check failed:", error);
+      return false;
+    }
+  };
 
   useEffect(() => {
     AuthClient.create().then(async (client) => {
@@ -47,6 +60,7 @@ export const useAuth = () => {
     setActor(undefined);
   }, [authClient]);
 
+  
   return {
     isAuthenticated,
     login,

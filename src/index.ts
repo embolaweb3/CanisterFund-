@@ -78,6 +78,13 @@ export default class CanisterFund{
     return `User ${name} registered successfully`;
   }
 
+  @query([], IDL.Bool)
+  getUser(): boolean {
+    const user = msgCaller()
+     const isRegistered = userProfiles.find((c) => c.principal.toText() === user.toText())
+    return isRegistered ? true : false;
+  }
+
   // ========== CAMPAIGN MANAGEMENT ==========
   @update([IDL.Text, IDL.Text, IDL.Nat64,IDL.Nat64, IDL.Nat64],IDL.Text)
   createCampaign(

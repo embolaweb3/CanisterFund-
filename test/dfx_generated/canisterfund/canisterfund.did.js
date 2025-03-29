@@ -41,7 +41,6 @@ export const idlFactory = ({ IDL }) => {
         ['query'],
       ),
     'getTotalCampaigns' : IDL.Func([], [IDL.Nat64], ['query']),
-    'getUser' : IDL.Func([], [IDL.Bool], ['query']),
     'registerUser' : IDL.Func([IDL.Text, IDL.Nat64], [IDL.Text], []),
     'searchCampaigns' : IDL.Func(
         [IDL.Text],

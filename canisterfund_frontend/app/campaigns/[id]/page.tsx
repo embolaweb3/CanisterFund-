@@ -1,3 +1,4 @@
+"use client"
 import { useRouter } from 'next/router';
 import { useQuery } from '@tanstack/react-query';
 import Layout from '../../components/Layout';
@@ -7,16 +8,38 @@ import ContributionForm from '../../components/ContributionForm';
 import ContributionsList from '../../components/ContributionsList';
 import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 const { formatDistanceToNow } = require('date-fns');
+import {createActor} from '../../utils/crowdfunding'
+import { useEffect, useState } from 'react';
+
 
 
 export default function CampaignDetailPage() {
   const router = useRouter();
   const { id } = router.query;
-  const { actor, isAuthenticated, principal } = useAuth();
+  const { isAuthenticated, principal } = useAuth();
+  const [actor, setActor] = useState<any | null>(null);
+
+  const fetchActor = async () => {
+    try {
+      if (isAuthenticated) {
+        const actorInstance = await createActor();
+        setActor(actorInstance);
+      }
+    } catch (error) {
+      console.error("Failed to create actor:", error);
+    }
+  };
+  
+  useEffect(() => {
+    fetchActor();
+  }, [isAuthenticated]); 
 
   const { data: campaign } = useQuery({
     queryKey: ['campaign', id],
     queryFn: async () => {
+      if(!actor){
+        fetchActor()
+      }
       const campaigns = await actor!.getCampaigns();
       return campaigns.find((c :any) => c.id === id);
     },

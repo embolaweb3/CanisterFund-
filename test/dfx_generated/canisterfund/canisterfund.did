@@ -5,7 +5,6 @@ service: () -> {
     getCampaignContributions: (text) -> (vec record {campaignId:text; timestamp:nat64; amount:nat64; contributor:principal}) query;
     getCampaigns: () -> (vec record {id:text; status:text; title:text; endDate:nat64; beneficiary:principal; description:text; creationDate:nat64; targetAmount:nat64; currentAmount:nat64}) query;
     getTotalCampaigns: () -> (nat64) query;
-    getUser: () -> (bool) query;
     registerUser: (text, nat64) -> (text);
     searchCampaigns: (text) -> (vec record {id:text; status:text; title:text; endDate:nat64; beneficiary:principal; description:text; creationDate:nat64; targetAmount:nat64; currentAmount:nat64}) query;
     updateCampaign: (text, text, text, nat64, nat64) -> (text);

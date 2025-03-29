@@ -2,8 +2,9 @@
 import { useState } from 'react';
 import Layout from '../../components/Layout';
 import { useAuth } from '../../hooks/useAuth';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { toast } from 'react-hot-toast';
+import {createActor} from '../../utils/crowdfunding'
 
 export default function CreateCampaignPage() {
   const [formData, setFormData] = useState({
@@ -27,17 +28,20 @@ export default function CreateCampaignPage() {
 
     setIsSubmitting(true);
     try {
+      const actor = await createActor()
       const endDate = BigInt(Date.now() + Number(formData.durationDays) * 24 * 60 * 60 * 1000) * BigInt(1000000);
-      const targetAmount = BigInt(Number(formData.targetAmount) * 100000000);
-      
-      const result = await actor.createCampaign(
+      const targetAmount = BigInt(Number(formData.targetAmount) * 100000000);      
+        const result = await actor.createCampaign(
         formData.title,
         formData.description,
         targetAmount,
         endDate,
         BigInt(0) // currentAmount starts at 0
       );
-      
+
+      console.log(result,'rsults')
+      // const tests = await bounce.getCampaigns()
+      // console.log(tests,'tests')
       toast.success('Campaign created successfully!');
       router.push('/campaigns');
     } catch (error) {
@@ -68,7 +72,7 @@ export default function CreateCampaignPage() {
                   required
                   value={formData.title}
                   onChange={handleChange}
-                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-ic-blue focus:border-ic-blue sm:text-sm"
+                  className="mt-1 block w-full border border-gray-300 text-gray-700 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-ic-blue focus:border-ic-blue sm:text-sm"
                 />
               </div>
               
@@ -83,7 +87,7 @@ export default function CreateCampaignPage() {
                   required
                   value={formData.description}
                   onChange={handleChange}
-                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-ic-blue focus:border-ic-blue sm:text-sm"
+                  className="mt-1 block w-full border border-gray-300 text-gray-700 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-ic-blue focus:border-ic-blue sm:text-sm"
                 />
               </div>
               
@@ -101,7 +105,7 @@ export default function CreateCampaignPage() {
                     required
                     value={formData.targetAmount}
                     onChange={handleChange}
-                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-ic-blue focus:border-ic-blue sm:text-sm"
+                    className="mt-1 block w-full border border-gray-300 text-gray-700 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-ic-blue focus:border-ic-blue sm:text-sm"
                   />
                 </div>
                 
@@ -118,7 +122,7 @@ export default function CreateCampaignPage() {
                     required
                     value={formData.durationDays}
                     onChange={handleChange}
-                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-ic-blue focus:border-ic-blue sm:text-sm"
+                    className="mt-1 block w-full border border-gray-300 text-gray-700 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-ic-blue focus:border-ic-blue sm:text-sm"
                   />
                 </div>
               </div>
@@ -135,7 +139,7 @@ export default function CreateCampaignPage() {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-ic-blue hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="ml-3 inline-flex justify-center py-2 bg-blue-500 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-ic-blue hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isSubmitting ? 'Creating...' : 'Create Campaign'}
               </button>

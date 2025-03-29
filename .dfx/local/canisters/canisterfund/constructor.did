@@ -24,6 +24,7 @@ service : () -> {
       },
     ) query;
   getTotalCampaigns : () -> (nat64) query;
+  getUser : () -> (bool) query;
   registerUser : (text, nat64) -> (text);
   searchCampaigns : (text) -> (
       vec record {

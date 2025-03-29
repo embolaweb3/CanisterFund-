@@ -24,13 +24,13 @@ export default function Home() {
                 <div className="mt-5 sm:mt-8 sm:flex sm:justify-center lg:justify-start">
                   <div className="rounded-md shadow">
                     <Link href="/campaigns"
-                     className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-gray-800 bg-ic-blue hover:bg-blue-700 md:py-4 md:text-lg md:px-10">
+                     className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-ic-blue bg-yellow-700 hover:bg-yellow-900 md:py-4 md:text-lg md:px-10">
                        Explore Campaigns
                     </Link>
                   </div>
                   {isAuthenticated && (
                     <div className="mt-3 sm:mt-0 sm:ml-3">
-                      <Link className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-ic-blue bg-white hover:bg-gray-100 md:py-4 md:text-lg md:px-10"
+                      <Link className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-ic-blue bg-gray-700 hover:bg-gray-900 md:py-4 md:text-lg md:px-10"
                       href="/campaigns/create">
                          Start a Campaign
                       </Link>
