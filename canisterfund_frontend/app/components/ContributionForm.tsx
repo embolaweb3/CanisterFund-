@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useAuth } from '../hooks/useAuth';
 import { toast } from 'react-hot-toast';
+import { createActor } from '../utils/crowdfunding';
 
 interface ContributionFormProps {
   campaignId: string;
@@ -9,7 +10,6 @@ interface ContributionFormProps {
 export default function ContributionForm({ campaignId }: ContributionFormProps) {
   const [amount, setAmount] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { actor } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -17,7 +17,8 @@ export default function ContributionForm({ campaignId }: ContributionFormProps) 
 
     setIsSubmitting(true);
     try {
-       await actor?.contributeToCampaign(campaignId, BigInt(Number(amount) * 100000000));
+          const actor = await createActor()
+       await actor.contributeToCampaign(campaignId, BigInt(Number(amount) * 100000000));
       toast.success('Contribution successful!');
       setAmount('');
       // Optionally refresh campaign data

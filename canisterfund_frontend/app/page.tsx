@@ -3,12 +3,28 @@ import Layout from './components/Layout';
 import Link from 'next/link';
 import { useAuth } from './hooks/useAuth';
 import { motion } from 'framer-motion';
+import RegistrationModal from './components/RegistrationModal';
+import { useState } from 'react';
 
 export default function Home() {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, isRegistered, registerUser } = useAuth();
+  const [showRegistration, setShowRegistration] = useState(false);
+
+  const handleCreateCampaignClick = (e: React.MouseEvent) => {
+    if (!isRegistered) {
+      e.preventDefault();
+      setShowRegistration(true);
+    }
+  };
 
   return (
     <Layout>
+       {/* Registration Modal */}
+       <RegistrationModal
+        isOpen={showRegistration}
+        onClose={() => setShowRegistration(false)}
+        onRegister={registerUser}
+      />
       <div className="relative bg-ic-dark overflow-hidden">
         <div className="max-w-7xl mx-auto">
           <div className="relative z-10 pb-8 bg-ic-dark sm:pb-16 md:pb-20 lg:max-w-2xl lg:w-full lg:pb-28 xl:pb-32">
@@ -30,7 +46,8 @@ export default function Home() {
                   </div>
                   {isAuthenticated && (
                     <div className="mt-3 sm:mt-0 sm:ml-3">
-                      <Link className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-ic-blue bg-gray-700 hover:bg-gray-900 md:py-4 md:text-lg md:px-10"
+                      <Link  onClick={handleCreateCampaignClick}
+                       className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-ic-blue bg-gray-700 hover:bg-gray-900 md:py-4 md:text-lg md:px-10"
                       href="/campaigns/create">
                          Start a Campaign
                       </Link>

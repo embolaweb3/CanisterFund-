@@ -37,6 +37,7 @@ export interface _SERVICE {
     >
   >,
   'getTotalCampaigns' : ActorMethod<[], bigint>,
+  'getUser' : ActorMethod<[], boolean>,
   'registerUser' : ActorMethod<[string, bigint], string>,
   'searchCampaigns' : ActorMethod<
     [string],

@@ -9,20 +9,8 @@ export const useAuth = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [authClient, setAuthClient] = useState<AuthClient>();
   const [principal, setPrincipal] = useState<Principal>();
-  const [actor, setActor] = useState<any>();
   const [isRegistered, setIsRegistered] = useState(false);
 
-  const checkRegistration = async (actor: any, principal: Principal) => {
-    try {
-      // Assuming you have a canister method to check registration
-      const response = await actor.checkUserRegistration(principal.toString());
-      setIsRegistered(response);
-      return response;
-    } catch (error) {
-      console.error("Registration check failed:", error);
-      return false;
-    }
-  };
 
   useEffect(() => {
     AuthClient.create().then(async (client) => {
@@ -31,10 +19,25 @@ export const useAuth = () => {
         setIsAuthenticated(true);
         const identity = client.getIdentity();
         setPrincipal(identity.getPrincipal());
-        setActor(createActor({ authClient: client }));
+         // Check registration status
+         await checkRegistration();
       }
+
     });
   }, []);
+
+  const checkRegistration = async () => {
+    try {
+      const actor = await createActor()
+      const response = await actor.getUser();
+      setIsRegistered(response);
+      console.log(response)
+      return response;
+    } catch (error) {
+      console.error("Registration check failed:", error);
+      return false;
+    }
+  };
 
   const login = useCallback(async () => {
     if (!authClient) return;
@@ -47,7 +50,6 @@ export const useAuth = () => {
         setIsAuthenticated(true);
         const identity = authClient.getIdentity();
         setPrincipal(identity.getPrincipal());
-        setActor(createActor({ authClient }));
       },
     });
   }, [authClient]);
@@ -57,7 +59,6 @@ export const useAuth = () => {
     await authClient.logout();
     setIsAuthenticated(false);
     setPrincipal(undefined);
-    setActor(undefined);
   }, [authClient]);
 
   
@@ -66,6 +67,24 @@ export const useAuth = () => {
     login,
     logout,
     principal,
-    actor,
+    isRegistered,
+    registerUser: async (name: string) => {
+      const actor = await createActor()
+      if (!actor) throw new Error('Actor not initialized');
+      try {
+        const response = await actor.registerUser(name, BigInt(10));
+        if(response.includes('successfully') || response.includes('already')){
+          return true
+        }
+        else{
+          return false
+        }
+       
+        
+      } catch (error) {
+        console.error("Registration failed:", error);
+        return false;
+      }
+    },
   };
 };

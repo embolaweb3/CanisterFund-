@@ -14,7 +14,7 @@ export default function CreateCampaignPage() {
     durationDays: '30',
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { actor, principal } = useAuth();
+  const {  principal } = useAuth();
   const router = useRouter();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -24,6 +24,7 @@ export default function CreateCampaignPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    const actor = await createActor()
     if (!principal || !actor) return;
 
     setIsSubmitting(true);
